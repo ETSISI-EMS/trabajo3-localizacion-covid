@@ -1,10 +1,5 @@
 :point_right: PUT YOUR CI BADGE HERE
-:point_right: PUT YOUR SCOREBOARD BADGE HERE
 
 # EMS-lab3 Maintainability
 
-Refactor the code to obtain a good compliance level according to the BetterCodeHub guidelines.
-
-See the file BetterCodeHub.md
-
-Send a pull request to the repository https://github.com/ETSISI-EMS/LAB3_COMPETITION.git with your score to compare your score with the rest of teams
+En esta práctica vamos a simular que una consultora contrató a los alumnos de EMS para mejorar la mantenibilidad de uno de sus sistemas Java. Para ello se proponen seguir los 10 principios de mantenibilidad1 vistos en clase. Primero, actuando como *DevOps engineer* , los alumnos deberán preparar un pipeline capaz de analizar la calidad del código para que, en el caso de no alcanzar unos mínimos de calidad, se prevenga su incorporación a la rama principal. Segundo, actuando como *desarrolladores*, los alumnos deberán probar su pipeline y refactorizar el código para que cumpla los estándares de calidad establecidos previamente. 
