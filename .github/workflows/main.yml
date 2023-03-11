@@ -1,0 +1,51 @@
+
+name: SonarCloud
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types: [opened, synchronize, reopened]
+jobs:
+  build:
+    name: Build and analyze
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+      - name: Set up JDK 11
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+      - name: Cache SonarCloud packages
+        uses: actions/cache@v1
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
+      - name: Cache Maven packages
+        uses: actions/cache@v1
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
+      - name: Build and analyze
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=${{ secrets.PROJECT_ID }}
+      - name: Query status
+        id: qgStatus
+        uses: fjogeleit/http-request-action@v1
+        with:
+          url: 'https://sonarcloud.io/api/qualitygates/project_status?projectKey=${{ secrets.PROJECT_ID }}'
+          method: 'GET'
+      - name: show status
+        run: echo ${{ fromJson(steps.qgStatus.outputs.response).projectStatus.status}}
+      - name: fail_if_error
+        if: ${{ fromJson(steps.qgStatus.outputs.response).projectStatus.status == 'ERROR'}}
+        uses: actions/github-script@v3
+        with:
+          script: |
+            core.setFailed('quality gates not met')
