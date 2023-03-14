@@ -6,10 +6,10 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.practica</groupId>
-	<artifactId>refactor_ems</artifactId>
+	<artifactId>trabajo3-localizacion-covid</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 
-	<name>refactor_ems</name>
+	<name>trabajo3-localizacion-covid</name>
 	<url>http://www.example.com</url>
 
 	<properties>
