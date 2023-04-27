@@ -120,24 +120,28 @@ public class ContactosCovid {
 				datas = dividirEntrada(data.trim());
 				for (String linea : datas) {
 					String datos[] = this.dividirLineaData(linea);
-					if (datos[0].equals("PERSONA")) {
+					if (!datos[0].equals("PERSONA")) {
+						if (!datos[0].equals("LOCALIZACION")){
+							throw new EmsInvalidTypeException();
+						}
+						else {
+							if (datos.length != Constantes.MAX_DATOS_LOCALIZACION) {
+								throw new EmsInvalidNumberOfDataException(
+										"El número de datos para LOCALIZACION es menor de 6" );
+							}
+							PosicionPersona pp = this.crearPosicionPersona(datos);
+							this.localizacion.addLocalizacion(pp);
+							this.listaContactos.insertarNodoTemporal(pp);
+						}
+					}
+					else {
 						if (datos.length != Constantes.MAX_DATOS_PERSONA) {
 							throw new EmsInvalidNumberOfDataException("El número de datos para PERSONA es menor de 8");
 						}
 						this.poblacion.addPersona(this.crearPersona(datos));
 					}
-					else if (datos[0].equals("LOCALIZACION")) {
-						if (datos.length != Constantes.MAX_DATOS_LOCALIZACION) {
-							throw new EmsInvalidNumberOfDataException(
-									"El número de datos para LOCALIZACION es menor de 6" );
-						}
-						PosicionPersona pp = this.crearPosicionPersona(datos);
-						this.localizacion.addLocalizacion(pp);
-						this.listaContactos.insertarNodoTemporal(pp);
-					}
-					else {
-						throw new EmsInvalidTypeException();
-					}
+
+
 				}
 
 			}
