@@ -72,16 +72,15 @@ public class ContactosCovid {
 			if (!datos[0].equals("PERSONA") && !datos[0].equals("LOCALIZACION")) {
 				throw new EmsInvalidTypeException();
 			}
-			if (datos[0].equals("PERSONA")) {
-				if (datos.length != Constantes.MAX_DATOS_PERSONA) {
-					throw new EmsInvalidNumberOfDataException("El número de datos para PERSONA es menor de 8");
-				}
+			if (isPersona(datos)) {
+				throw new EmsInvalidNumberOfDataException("El número de datos para PERSONA es menor de 8");
+			}else {
 				this.poblacion.addPersona(this.crearPersona(datos));
 			}
-			if (datos[0].equals("LOCALIZACION")) {
-				if (datos.length != Constantes.MAX_DATOS_LOCALIZACION) {
-					throw new EmsInvalidNumberOfDataException("El número de datos para LOCALIZACION es menor de 6");
-				}
+			if (isLocalizacion(datos)) {
+				throw new EmsInvalidNumberOfDataException("El número de datos para LOCALIZACION es menor de 6");
+			}
+			else{
 				PosicionPersona pp = this.crearPosicionPersona(datos);
 				this.localizacion.addLocalizacion(pp);
 				this.listaContactos.insertarNodoTemporal(pp);
@@ -304,5 +303,23 @@ public class ContactosCovid {
 		segundo = Integer.parseInt(valores[1]);
 		FechaHora fechaHora = new FechaHora(dia, mes, anio, minuto, segundo);
 		return fechaHora;
+	}
+
+	private boolean isPersona(String[] datos){
+		if(datos[0].equals("PERSONA")){
+			if(datos.length != Constantes.MAX_DATOS_PERSONA){
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private boolean isLocalizacion(String[] datos){
+		if (datos[0].equals("LOCALIZACION")) {
+			if (datos.length != Constantes.MAX_DATOS_LOCALIZACION) {
+				return true;
+			}
+		}
+		return false;
 	}
 }
