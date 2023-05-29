@@ -3,11 +3,14 @@ package com.practica.ems.covid;
 
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import com.practica.excecption.EmsDuplicatePersonException;
 import com.practica.excecption.EmsPersonNotFoundException;
 import com.practica.genericas.FechaHora;
 import com.practica.genericas.Persona;
+import jdk.internal.net.http.common.Log;
 
 public class Poblacion {
 	LinkedList<Persona> lista ;
@@ -62,23 +65,24 @@ public class Poblacion {
 		throw new EmsPersonNotFoundException();
 	}
 	
-	public void printPoblacion() {   
-		 
+	public void printPoblacion() {
+		Logger logger = Logger.getLogger(Poblacion.class.getName());
+
 	    for(int i = 0; i < lista.size(); i++) {	    	
 	    	FechaHora fecha = lista.get(i).getFechaNacimiento();
 	        // Documento	    	
-	        System.out.printf("%d;%s;", i, lista.get(i).getDocumento());
+			logger.log(Level.ALL, String.format("%d;%s;", i, lista.get(i).getDocumento()));
 	        // nombre y apellidos	              
-	        System.out.printf("%s,%s;",lista.get(i).getApellidos(), lista.get(i).getNombre());	        
+			logger.log(Level.ALL, String.format("%s,%s;",lista.get(i).getApellidos(), lista.get(i).getNombre()));
 	        // correo electrónico
-	        System.out.printf("%s;", lista.get(i).getEmail());
+			logger.log(Level.ALL, String.format("%s;", lista.get(i).getEmail()));
 	        // Códifo postal
-	        System.out.printf("%s,%s;", lista.get(i).getDireccion(), lista.get(i).getCp());	        
+			logger.log(Level.ALL, String.format("%s,%s;", lista.get(i).getDireccion(), lista.get(i).getCp()));
 	        // Fecha de nacimiento
-	        System.out.printf("%02d/%02d/%04d\n", fecha.getFecha().getDia(), 
-	         fecha.getFecha().getMes(), 
-	         fecha.getFecha().getAnio());	        
-	    }
+			logger.log(Level.ALL, String.format("%02d/%02d/%04d%n", fecha.getFecha().getDia(),
+	         fecha.getFecha().getMes(),
+	         fecha.getFecha().getAnio()));
+		}
 	}
 
 	@Override
@@ -95,7 +99,7 @@ public class Poblacion {
 	        // Direccion y código postal
 	        cadena+=String.format("%s,%s;", lista.get(i).getDireccion(), lista.get(i).getCp());	        
 	        // Fecha de nacimiento
-	        cadena+=String.format("%02d/%02d/%04d\n", fecha.getFecha().getDia(), 
+	        cadena+=String.format("%02d/%02d/%04d%n", fecha.getFecha().getDia(),
 	        		fecha.getFecha().getMes(), 
 	        		fecha.getFecha().getAnio());
 		}

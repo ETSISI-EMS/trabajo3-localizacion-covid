@@ -89,7 +89,7 @@ public class Persona {
         // Direccion y código postal
 		cadena += String.format("%s,%s;", getDireccion(), getCp());
         // Fecha de nacimiento
-		cadena+=String.format("%02d/%02d/%04d\n", fecha.getFecha().getDia(), 
+		cadena+=String.format("%02d/%02d/%04d%n", fecha.getFecha().getDia(),
         		fecha.getFecha().getMes(), 
         		fecha.getFecha().getAnio());
 

@@ -3,11 +3,14 @@ package com.practica.ems.covid;
 
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import com.practica.excecption.EmsDuplicateLocationException;
 import com.practica.excecption.EmsLocalizationNotFoundException;
 import com.practica.genericas.FechaHora;
 import com.practica.genericas.PosicionPersona;
+import jdk.internal.net.http.common.Log;
 
 public class Localizacion {
 	LinkedList<PosicionPersona> lista;
@@ -63,18 +66,20 @@ public class Localizacion {
 	    
 	}
 	
-	void printLocalizacion() {    
+	void printLocalizacion() {
+		Logger logger = Logger.getLogger(Localizacion.class.getName());
+
 	    for(int i = 0; i < this.lista.size(); i++) {
-	        System.out.printf("%d;%s;", i, lista.get(i).getDocumento());
-	        FechaHora fecha = lista.get(i).getFechaPosicion();        
-	        System.out.printf("%02d/%02d/%04d;%02d:%02d;", 
+			logger.log(Level.ALL, String.format("%d;%s;", i, lista.get(i).getDocumento()));
+	        FechaHora fecha = lista.get(i).getFechaPosicion();
+			logger.log(Level.ALL, String.format("%02d/%02d/%04d;%02d:%02d;",
 	        		fecha.getFecha().getDia(), 
 	        		fecha.getFecha().getMes(), 
 	        		fecha.getFecha().getAnio(),
-	        		fecha.getHora().getHora(),
-	        		fecha.getHora().getMinuto());
-	        System.out.printf("%.4f;%.4f\n", lista.get(i).getCoordenada().getLatitud(), 
-	        		lista.get(i).getCoordenada().getLongitud());
+	        		fecha.getHora().getHoraJessica(),
+	        		fecha.getHora().getMinuto()));
+			logger.log(Level.ALL, String.format("%.4f;%.4f%n", lista.get(i).getCoordenada().getLatitud(),
+	        		lista.get(i).getCoordenada().getLongitud()));
 	    }
 	}
 
@@ -89,9 +94,9 @@ public class Localizacion {
 	        		fecha.getFecha().getDia(), 
 	        		fecha.getFecha().getMes(), 
 	        		fecha.getFecha().getAnio(),
-	        		fecha.getHora().getHora(),
+	        		fecha.getHora().getHoraJessica(),
 	        		fecha.getHora().getMinuto());
-	        cadena+=String.format("%.4f;%.4f\n", pp.getCoordenada().getLatitud(), 
+	        cadena+=String.format("%.4f;%.4f%n", pp.getCoordenada().getLatitud(),
 	        		pp.getCoordenada().getLongitud());
 	    }
 		

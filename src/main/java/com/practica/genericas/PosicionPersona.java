@@ -32,9 +32,9 @@ public class PosicionPersona {
 	        		fecha.getFecha().getDia(), 
 	        		fecha.getFecha().getMes(), 
 	        		fecha.getFecha().getAnio(),
-	        		fecha.getHora().getHora(),
+	        		fecha.getHora().getHoraJessica(),
 	        		fecha.getHora().getMinuto());
-        cadena+=String.format("%.4f;%.4f\n", getCoordenada().getLatitud(), 
+        cadena+=String.format("%.4f;%.4f%n", getCoordenada().getLatitud(),
 	        		getCoordenada().getLongitud());
 	
 		return cadena;
