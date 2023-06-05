@@ -130,6 +130,7 @@ public class ContactosCovid {
 				}
 
 			}
+		}
 		catch (Exception e) {
 			e.printStackTrace();
 		} finally {
