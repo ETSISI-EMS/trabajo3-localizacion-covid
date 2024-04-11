@@ -58,14 +58,11 @@ public class ContactosCovid {
 		this.listaContactos = listaContactos;
 	}
 
+	
 	public void loadData(String data, boolean reset) throws EmsInvalidTypeException, EmsInvalidNumberOfDataException,
 			EmsDuplicatePersonException, EmsDuplicateLocationException {
 		// borro información anterior
-		if (reset) {
-			this.poblacion = new Poblacion();
-			this.localizacion = new Localizacion();
-			this.listaContactos = new ListaContactos();
-		}
+		resetData(reset);
 		String datas[] = dividirEntrada(data);
 		for (String linea : datas) {
 			String datos[] = this.dividirLineaData(linea);
@@ -73,20 +70,36 @@ public class ContactosCovid {
 				throw new EmsInvalidTypeException();
 			}
 			if (datos[0].equals("PERSONA")) {
-				if (datos.length != Constantes.MAX_DATOS_PERSONA) {
-					throw new EmsInvalidNumberOfDataException("El número de datos para PERSONA es menor de 8");
-				}
-				this.poblacion.addPersona(this.crearPersona(datos));
+				processPersonData(datos);
 			}
 			if (datos[0].equals("LOCALIZACION")) {
-				if (datos.length != Constantes.MAX_DATOS_LOCALIZACION) {
-					throw new EmsInvalidNumberOfDataException("El número de datos para LOCALIZACION es menor de 6");
-				}
-				PosicionPersona pp = this.crearPosicionPersona(datos);
-				this.localizacion.addLocalizacion(pp);
-				this.listaContactos.insertarNodoTemporal(pp);
+				processLocalizacionData(datos);
 			}
 		}
+	}
+
+	private void resetData(boolean reset) {
+		if (reset) {
+			this.poblacion = new Poblacion();
+			this.localizacion = new Localizacion();
+			this.listaContactos = new ListaContactos();
+		}
+	}
+
+	private void processPersonData(String[] datos) throws EmsDuplicatePersonException, EmsInvalidNumberOfDataException {
+		if (datos.length != Constantes.MAX_DATOS_PERSONA) {
+			throw new EmsInvalidNumberOfDataException("El número de datos para PERSONA es menor de 8");
+		}
+		this.poblacion.addPersona(this.crearPersona(datos));
+	}
+
+	private void processLocalizacionData (String[] datos) throws EmsInvalidNumberOfDataException, EmsDuplicateLocationException {
+		if (datos.length != Constantes.MAX_DATOS_LOCALIZACION) {
+			throw new EmsInvalidNumberOfDataException("El número de datos para LOCALIZACION es menor de 6");
+		}
+		PosicionPersona pp = this.crearPosicionPersona(datos);
+		this.localizacion.addLocalizacion(pp);
+		this.listaContactos.insertarNodoTemporal(pp);
 	}
 
 	public void loadDataFile(String fichero, boolean reset) {
