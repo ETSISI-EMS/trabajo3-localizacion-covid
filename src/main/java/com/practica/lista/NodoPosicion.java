@@ -1,6 +1,6 @@
 package com.practica.lista;
 
-import java.util.ArrayList;
+
 
 import com.practica.genericas.Coordenada;
 
