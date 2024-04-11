@@ -98,11 +98,67 @@ public class ContactosCovid {
 		
 	}
 
-	private void resetBufferReader(reset){
+	private void resetBufferReader(boolean reset){
 		if (reset) {
 			this.poblacion = new Poblacion();
 			this.localizacion = new Localizacion();
 			this.listaContactos = new ListaContactos();
+		}
+	}
+
+	private void niPersonaniLocalización(String datos[]){
+		if (!datos[0].equals("PERSONA") && !datos[0].equals("LOCALIZACION")) {
+			throw new EmsInvalidTypeException();
+		}
+	}
+
+	private void esPersona(String datos[]){
+		if (datos[0].equals("PERSONA")) {
+			numDatosPersona(datos);
+			this.poblacion.addPersona(this.crearPersona(datos));
+		}
+	}
+
+	private void esLocalizacion(String datos[]){
+		if (datos[0].equals("LOCALIZACION")) {
+			numeDatosLocalizacion(datos);
+			PosicionPersona pp = this.crearPosicionPersona(datos);
+			this.localizacion.addLocalizacion(pp);
+			this.listaContactos.insertarNodoTemporal(pp);
+		}
+	}
+
+	private void numDatosPersona(String datos[]){
+		if (datos.length != Constantes.MAX_DATOS_PERSONA) {
+			throw new EmsInvalidNumberOfDataException("El número de datos para PERSONA es menor de 8");
+		}
+	}
+
+	private void numeDatosLocalizacion(String datos[]){
+		if (datos.length != Constantes.MAX_DATOS_LOCALIZACION) {
+			throw new EmsInvalidNumberOfDataException("El número de datos para LOCALIZACION es menor de 6" );
+		}
+	}
+
+	private void cambioLinea(String[] datas){
+		for (String linea : datas) {
+			String datos[] = this.dividirLineaData(linea);
+			niPersonaniLocalización(datos);
+			esPersona(datos);
+			esLocalizacion(datos);
+		}
+	}
+
+	private void fileReaderVacio(FileReader fr){
+		if (null != fr) {
+			fr.close();
+		}
+	}
+
+	private void dividirEntrada(String[] datas,String data){
+		while ((data = br.readLine()) != null) {
+			datas = dividirEntrada(data.trim());
+			cambioLinea(datas);
 		}
 	}
 	@SuppressWarnings("resource")
@@ -119,31 +175,7 @@ public class ContactosCovid {
 			 * tiene el tipo PERSONA o LOCALIZACION y cargo la línea de datos en la 
 			 * lista correspondiente. Sino viene ninguno de esos tipos lanzo una excepción
 			 */
-			while ((data = br.readLine()) != null) {
-				datas = dividirEntrada(data.trim());
-				for (String linea : datas) {
-					String datos[] = this.dividirLineaData(linea);
-					if (!datos[0].equals("PERSONA") && !datos[0].equals("LOCALIZACION")) {
-						throw new EmsInvalidTypeException();
-					}
-					if (datos[0].equals("PERSONA")) {
-						if (datos.length != Constantes.MAX_DATOS_PERSONA) {
-							throw new EmsInvalidNumberOfDataException("El número de datos para PERSONA es menor de 8");
-						}
-						this.poblacion.addPersona(this.crearPersona(datos));
-					}
-					if (datos[0].equals("LOCALIZACION")) {
-						if (datos.length != Constantes.MAX_DATOS_LOCALIZACION) {
-							throw new EmsInvalidNumberOfDataException(
-									"El número de datos para LOCALIZACION es menor de 6" );
-						}
-						PosicionPersona pp = this.crearPosicionPersona(datos);
-						this.localizacion.addLocalizacion(pp);
-						this.listaContactos.insertarNodoTemporal(pp);
-					}
-				}
-
-			}
+			dividirEntrada();
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -152,9 +184,7 @@ public class ContactosCovid {
 			// que se cierra tanto si todo va bien como si salta
 			// una excepcion.
 			try {
-				if (null != fr) {
-					fr.close();
-				}
+				fileReaderVacio();
 			} catch (Exception e2) {
 				e2.printStackTrace();
 			}
