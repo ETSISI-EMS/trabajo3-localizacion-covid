@@ -1,12 +1,12 @@
 package com.practica.genericas;
 
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Locale;
 
 public class FechaHora implements Comparable<FechaHora>{
 	public class Fecha {
+
+		private static int PRIME = 3;
 		private int dia, mes, anio;
 		 
 		public Fecha(int dia, int mes, int anio) {
@@ -115,10 +115,9 @@ public class FechaHora implements Comparable<FechaHora>{
 
 	@Override
 	public int hashCode() {
-		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((fecha == null) ? 0 : fecha.hashCode());
-		result = prime * result + ((hora == null) ? 0 : hora.hashCode());
+		result = Fecha.PRIME * result + ((fecha == null) ? 0 : fecha.hashCode());
+		result = Fecha.PRIME * result + ((hora == null) ? 0 : hora.hashCode());
 		return result;
 	}
 
