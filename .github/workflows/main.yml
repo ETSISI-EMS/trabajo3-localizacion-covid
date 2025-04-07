@@ -1,17 +1,18 @@
+name: Build
 
-name: SonarCloud
 on:
   push:
     branches:
       - main
-  pull_request:
-    types: [opened, synchronize, reopened]
+
+
 jobs:
   build:
     name: Build and analyze
     runs-on: ubuntu-latest
+    
     steps:
-      - uses: actions/checkout@v4.1.2
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
       - name: Set up JDK 21
@@ -19,29 +20,30 @@ jobs:
         with:
           java-version: 21
           distribution: corretto
-      - name: Cache SonarCloud packages
-        uses: actions/cache@v4.0.2
+      - name: Cache SonarQube packages
+        uses: actions/cache@v4
         with:
           path: ~/.sonar/cache
           key: ${{ runner.os }}-sonar
           restore-keys: ${{ runner.os }}-sonar
       - name: Cache Maven packages
-        uses: actions/cache@v4.0.2
+        uses: actions/cache@v4
         with:
           path: ~/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
       - name: Build and analyze
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=${{ secrets.PROJECT_ID }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=${{ secrets.PROJECT_ID }} -Dsonar.projectName='${{ secrets.PROJECT_NAME }}'
       - name: Query status
         id: qgStatus
         uses: fjogeleit/http-request-action@v1.15.2
         with:
-          url: 'https://sonarcloud.io/api/qualitygates/project_status?projectKey=${{ secrets.PROJECT_ID }}'
+          url: '${{ secrets.SONAR_HOST_URL }}/api/qualitygates/project_status?projectKey=${{ secrets.PROJECT_ID}}'
           method: 'GET'
+          bearerToken: ${{ secrets.SONAR_TOKEN }}
       - name: show status
         run: echo ${{ fromJson(steps.qgStatus.outputs.response).projectStatus.status}}
       - name: fail_if_error
@@ -49,4 +51,4 @@ jobs:
         uses: actions/github-script@v7.0.1
         with:
           script: |
-            core.setFailed('quality gates not met')
+            core.setFailed('quality gates not met') 
