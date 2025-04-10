@@ -38,7 +38,7 @@ jobs:
         id: qg
         uses: fjogeleit/http-request-action@v1.15.2
         with:
-          url: 'https://sonarcloud.io/api/qualitygates/project_status?projectKey=CAMBIAR_POR_TU_projectKey'
+          url: 'https://sonarcloud.io/api/qualitygates/project_status?projectKey=Velascooo_trabajo3-localizacion-covid'
           method: 'GET'
       - name: Fail if Quality Gate not passed
         if: ${{ fromJson(steps.qg.outputs.response).projectStatus.status == 'ERROR' }}
