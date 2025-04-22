@@ -250,6 +250,8 @@ public class ContactosCovid {
 			case 7:
 				persona.setFechaNacimiento(parsearFecha(s));
 				break;
+				default:
+					break;
 			}
 		}
 		return persona;
@@ -279,6 +281,8 @@ public class ContactosCovid {
 				longitud = Float.parseFloat(s);
 				posicionPersona.setCoordenada(new Coordenada(latitud, longitud));
 				break;
+				default:
+					break;
 			}
 		}
 		return posicionPersona;
