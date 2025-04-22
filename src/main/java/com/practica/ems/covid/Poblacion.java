@@ -11,6 +11,7 @@ import com.practica.genericas.Persona;
 
 public class Poblacion {
 	LinkedList<Persona> lista ;
+	private final String formato="%s,%s;";
 
 	public Poblacion() {
 		super();
@@ -69,11 +70,11 @@ public class Poblacion {
 	        // Documento	    	
 	        System.out.printf("%d;%s;", i, lista.get(i).getDocumento());
 	        // nombre y apellidos	              
-	        System.out.printf("%s,%s;",lista.get(i).getApellidos(), lista.get(i).getNombre());	        
+	        System.out.printf(formato,lista.get(i).getApellidos(), lista.get(i).getNombre());	        
 	        // correo electrónico
 	        System.out.printf("%s;", lista.get(i).getEmail());
 	        // Códifo postal
-	        System.out.printf("%s,%s;", lista.get(i).getDireccion(), lista.get(i).getCp());	        
+	        System.out.printf(formato, lista.get(i).getDireccion(), lista.get(i).getCp());	        
 	        // Fecha de nacimiento
 	        System.out.printf("%02d/%02d/%04d\n", fecha.getFecha().getDia(), 
 	         fecha.getFecha().getMes(), 
@@ -89,11 +90,11 @@ public class Poblacion {
 	        // Documento	    	    	
 	        cadena+=String.format("%s;", lista.get(i).getDocumento());
 	        // nombre y apellidos	              
-	        cadena+=String.format("%s,%s;",lista.get(i).getApellidos(), lista.get(i).getNombre());	        
+	        cadena+=String.format(formato,lista.get(i).getApellidos(), lista.get(i).getNombre());	        
 	        // correo electrónico
 	        cadena+=String.format("%s;", lista.get(i).getEmail());
 	        // Direccion y código postal
-	        cadena+=String.format("%s,%s;", lista.get(i).getDireccion(), lista.get(i).getCp());	        
+	        cadena+=String.format(formato,  lista.get(i).getDireccion(), lista.get(i).getCp());
 	        // Fecha de nacimiento
 	        cadena+=String.format("%02d/%02d/%04d\n", fecha.getFecha().getDia(), 
 	        		fecha.getFecha().getMes(), 
